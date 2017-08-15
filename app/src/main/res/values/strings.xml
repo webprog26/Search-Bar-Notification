@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Search Bar Notification</string>
+    <string name="start_search_bar">Search bar</string>
+    <string name="search_notification_message">Search or type URL</string>
+    <string name="activate_search_bar_alert_dialog_title">Activate search bar</string>
+    <string name="search_bar_promote_message">Perform your search right from status bar</string>
+    <string name="activate">Activate</string>
+    <string name="cancel">Cancel</string>
+</resources>
