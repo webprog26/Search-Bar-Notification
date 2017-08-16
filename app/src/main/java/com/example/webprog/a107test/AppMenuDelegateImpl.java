@@ -1,10 +1,13 @@
 package com.example.webprog.a107test;
 
+import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.webprog.a107test.interfaces.AppMenuDelegate;
+import com.example.webprog.a107test.interfaces.MainView;
+import com.example.webprog.a107test.interfaces.PreferencesEditor;
 import com.example.webprog.a107test.interfaces.Presenter;
 
 /**
@@ -22,15 +25,34 @@ public class AppMenuDelegateImpl implements AppMenuDelegate {
     @Override
     public boolean onPrepareAppOptionsMenu(Menu menu) {
         MenuItem searchBarItem = menu.findItem(R.id.action_start_notification);
+        searchBarItem.setVisible(RemoteConfig.getIsSearchBarActive());
 
-        searchBarItem.setChecked(App.getPreferencesEditor().getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG));
+        final Presenter presenter= getPresenter();
 
-        if(RemoteConfig.getIsSearchBarActive()) {
-            searchBarItem.setVisible(true);
-        } else {
-            searchBarItem.setVisible(false);
+        if(presenter != null) {
+
+            final MainView mainView = presenter.getMainView();
+
+            if(mainView != null) {
+
+                final Context context = mainView.getContext();
+
+                if(context != null) {
+
+                    final PreferencesEditor preferencesEditor = App.getPreferenceEditorModule()
+                            .getPreferencesEditor(context);
+
+                    if(preferencesEditor != null) {
+
+                        searchBarItem.setChecked(preferencesEditor.getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG));
+                        return true;
+                    }
+
+                }
+            }
         }
-        return true;
+
+        return false;
     }
 
     @Override
@@ -42,24 +64,49 @@ public class AppMenuDelegateImpl implements AppMenuDelegate {
     @Override
     public boolean onAppOptionsItemSelected(MenuItem item, boolean defValue) {
 
-        final Presenter presenter = getPresenter();
+        final Presenter presenter= getPresenter();
 
-        switch (item.getItemId()){
-            case R.id.action_start_notification:
-                if(!item.isChecked()) {
-                    App.getPreferencesEditor().setBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG, true);
-                    item.setChecked(true);
-                    presenter.sendNotification();
-                    presenter.resetTimesAppWasLaunchedCount();
-                } else {
-                    App.getPreferencesEditor().setBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG, false);
-                    item.setChecked(false);
-                    presenter.cancelNotification();
+        if(presenter != null) {
+
+            final MainView mainView = presenter.getMainView();
+
+            if(mainView != null) {
+
+                final Context context = mainView.getContext();
+
+                if(context != null) {
+
+                    final PreferencesEditor preferencesEditor = App.getPreferenceEditorModule()
+                            .getPreferencesEditor(context);
+
+                    if(preferencesEditor != null) {
+
+                        switch (item.getItemId()){
+                            case R.id.action_start_notification:
+                                if(!item.isChecked()) {
+                                    preferencesEditor.setBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG, true);
+                                    item.setChecked(true);
+                                    presenter.sendNotification();
+                                    presenter.resetTimesAppWasLaunchedCount();
+                                } else {
+                                    preferencesEditor.setBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG, false);
+                                    item.setChecked(false);
+                                    presenter.cancelNotification();
+
+                                    if(mainView.isSearchInputFieldInFocus()){
+                                        mainView.hideKeyboard();
+                                    }
+                                }
+                                return true;
+                            default:
+                                return defValue;
+                        }
+                    }
+
                 }
-                return true;
-            default:
-                return defValue;
+            }
         }
+        return defValue;
     }
 
     private Presenter getPresenter() {

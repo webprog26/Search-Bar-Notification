@@ -20,22 +20,26 @@ public class SearchBarNotificationReceiver extends BroadcastReceiver {
 
             if(isActionCorrect(action)) {
 
-                final SearchNotification searchNotification = App.getSearchNotification();
+                final SearchNotification searchNotification = App.getSearchNotificationModule()
+                        .getSearchNotification(context);
 
-                    if(App.getPreferencesEditor()
-                            .getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG)) {
-                        searchNotification.sendForegroundNotification();
+                    if(searchNotification != null) {
+
+                        if(App.getPreferenceEditorModule().getPreferencesEditor(context)
+                                .getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG)) {
+                            searchNotification.sendForegroundNotification();
+                        }
                     }
 
                 }
             }
     }
 
-    private boolean isIntentNotNull(final Intent intent){
+    private static boolean isIntentNotNull(final Intent intent){
         return intent != null;
     }
 
-    private boolean isActionCorrect(final String action){
+    private static boolean isActionCorrect(final String action){
         return action != null
                 && (action.equals(ACTION_BOOT_COMPLETED) || action.equals(ACTION_QUICK_BOOT_POWERON));
     }

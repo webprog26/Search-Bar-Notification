@@ -1,5 +1,6 @@
 package com.example.webprog.a107test;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.webprog.a107test.interfaces.AppMenuDelegate;
@@ -21,6 +24,8 @@ import static com.example.webprog.a107test.interfaces.AppMenuDelegate.IS_SEARCH_
 public class MainActivity extends AppCompatActivity implements MainView {
 
     private static final String LOG_TAG = "MainView";
+
+    private EditText mEtSearch;
 
     private Presenter mPresenter;
     private AppMenuDelegate mAppMenuDelegate;
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mPresenter.setView(this);
         mAppMenuDelegate = new AppMenuDelegateImpl(mPresenter);
 
-        EditText mEtSearch = (EditText) findViewById(R.id.et_search);
+        mEtSearch = (EditText) findViewById(R.id.et_search);
 
         final Intent onGoingIntent = getIntent();
 
@@ -46,13 +51,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
 
         if(savedInstanceState == null){
-            if(!App.getPreferencesEditor().getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG)) {
+            if(!App.getPreferenceEditorModule().getPreferencesEditor(this).getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG)) {
                 incrementTimesAppWasLaunchedCount();
             }
         }
 
         Log.i(LOG_TAG, "App was launched " +
-                App.getPreferencesEditor().getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG)
+                App.getPreferenceEditorModule().getPreferencesEditor(this).getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG)
         + " times");
     }
 
@@ -65,21 +70,20 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-       return mAppMenuDelegate.onPrepareAppOptionsMenu(menu);
+       return getPresenter().onPrepareAppOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return mAppMenuDelegate.onCreateAppOptionsMenu(menu, getMenuInflater());
+        return getPresenter().onCreateAppOptionsMenu(menu, getMenuInflater());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       return mAppMenuDelegate.onAppOptionsItemSelected(item, super.onOptionsItemSelected(item));
+       return getPresenter().onAppOptionsItemSelected(item, super.onOptionsItemSelected(item));
     }
 
-    @Override
-    public boolean isSearchBarUserActionIntent(Intent searchBarUserActionIntent) {
+    private static boolean isSearchBarUserActionIntent(Intent searchBarUserActionIntent) {
         return searchBarUserActionIntent != null
                 && searchBarUserActionIntent.getAction().equals(SearchNotificationImpl.SEARCH_BAR_ACTION);
     }
@@ -90,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         return new Handler();
     }
 
-    @Override
-    public void incrementTimesAppWasLaunchedCount() {
+    private void incrementTimesAppWasLaunchedCount() {
 
         final Presenter presenter = getPresenter();
 
@@ -110,7 +113,33 @@ public class MainActivity extends AppCompatActivity implements MainView {
         return MainActivity.this;
     }
 
+    @NonNull
+    @Override
+    public AppMenuDelegate getAppMenuDelegate() {
+        return mAppMenuDelegate;
+    }
+
+    @Override
+    public boolean isSearchInputFieldInFocus() {
+        return getCurrentFocus().getId() == getEtSearch().getId();
+    }
+
+    @Override
+    public void hideKeyboard() {
+        View view = getCurrentFocus();
+        if(view != null) {
+            InputMethodManager inputMethodManager
+                    = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+    }
+
     private Presenter getPresenter() {
         return mPresenter;
+    }
+
+    private EditText getEtSearch() {
+        return mEtSearch;
     }
 }

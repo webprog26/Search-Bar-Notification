@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.webprog.a107test.interfaces.PreferencesEditor;
+import com.example.webprog.a107test.interfaces.Presenter;
 
 /**
  * Created by webprog on 09.08.17.
@@ -47,9 +48,9 @@ public class PreferencesEditorImpl implements PreferencesEditor {
         SharedPreferences sharedPreferences = getSearchBarSharedPreferences();
 
         if(sharedPreferences != null) {
-            return sharedPreferences.getInt(key, 0);
+            return sharedPreferences.getInt(key, Presenter.ZERO_LAUNCHES_COUNT);
         }
-        return -1;
+        return Presenter.ILLEGAL_LAUNCHES_COUNT;
     }
 
     private SharedPreferences getSearchBarSharedPreferences() {
