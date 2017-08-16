@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public boolean isSearchInputFieldInFocus() {
-        return getCurrentFocus().getId() == getEtSearch().getId();
+        return getCurrentFocus() != null && getCurrentFocus().getId() == getEtSearch().getId();
     }
 
     @Override
