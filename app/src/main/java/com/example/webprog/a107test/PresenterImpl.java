@@ -33,123 +33,74 @@ public class PresenterImpl implements Presenter {
 
     @Override
     public void sendNotification() {
-        final MainView mainView = getMainView();
+        final SearchNotification searchNotification = getSearchNotification();
 
-        if(mainView != null) {
-            final Context context = mainView.getContext();
-
-            if(context != null) {
-
-                final SearchNotification searchNotification = App.getSearchNotificationModule()
-                        .getSearchNotification(context);
-
-                if(searchNotification != null) {
-                    searchNotification.sendForegroundNotification();
-                }
+            if(searchNotification != null) {
+                searchNotification.sendForegroundNotification();
             }
-        }
     }
 
     @Override
     public void askUserToActivateSearchBar() {
+        final PreferencesEditor preferencesEditor = getPreferencesEditor();
+            if(preferencesEditor != null) {
 
-        final MainView mainView = getMainView();
+                final int currentTimesAppWasLaunchedCount = preferencesEditor
+                        .getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG);
 
-        if(mainView != null) {
-            final Context context = mainView.getContext();
+                if(currentTimesAppWasLaunchedCount == RemoteConfig.getTimesToShowActivateSearchBarDialog()) {
 
-            if(context != null) {
+                    resetTimesAppWasLaunchedCount();
 
-                final PreferencesEditor preferencesEditor = App.getPreferenceEditorModule()
-                        .getPreferencesEditor(context);
+                    final Handler handler = mainView.getHandler();
 
-                if(preferencesEditor != null) {
-
-                    final int currentTimesAppWasLaunchedCount = preferencesEditor
-                            .getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG);
-
-                    if(currentTimesAppWasLaunchedCount == RemoteConfig.getTimesToShowActivateSearchBarDialog()) {
-
-                        resetTimesAppWasLaunchedCount();
-
-                        final Handler handler = mainView.getHandler();
-
-                        if(handler != null) {
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new UserActionDialogImpl().showUserActionDialog(PresenterImpl.this);
-                                }
-                            }, RemoteConfig.getSearchBarWidgetUserDialogShowingTimePeriod());
-                        }
-
+                    if(handler != null) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                new UserActionDialogImpl().showUserActionDialog(PresenterImpl.this);
+                            }
+                        }, RemoteConfig.getSearchBarWidgetUserDialogShowingTimePeriod());
                     }
+
                 }
+
             }
-        }
     }
 
     @Override
     public void cancelNotification() {
-        final MainView mainView = getMainView();
+        final SearchNotification searchNotification = getSearchNotification();
 
-        if(mainView != null) {
-            final Context context = mainView.getContext();
-
-            if(context != null) {
-
-                final SearchNotification searchNotification = App.getSearchNotificationModule()
-                        .getSearchNotification(context);
-
-                if(searchNotification != null) {
-                    searchNotification.cancelForegroundNotification();
-                }
+            if(searchNotification != null) {
+                searchNotification.cancelForegroundNotification();
             }
-        }
     }
 
     @Override
     public void incrementTimesAppWasLaunchedCount() throws Exception {
-        final MainView mainView = getMainView();
 
-        if(mainView != null) {
-            final Context context = mainView.getContext();
+        final PreferencesEditor preferencesEditor = getPreferencesEditor();
 
-            if(context != null) {
-                final PreferencesEditor preferencesEditor = App.getPreferenceEditorModule()
-                        .getPreferencesEditor(context);
-
-                if(preferencesEditor != null) {
-                    final int currentTimesAppWasLaunchedCount = preferencesEditor
-                            .getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG);
+            if(preferencesEditor != null) {
+                final int currentTimesAppWasLaunchedCount = preferencesEditor
+                    .getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG);
                         if(currentTimesAppWasLaunchedCount != ILLEGAL_LAUNCHES_COUNT) {
                             preferencesEditor.setIntValue(TIMES_APP_WAS_LAUNCHED_TAG, (currentTimesAppWasLaunchedCount + 1));
                         } else {
                             throw new Exception(SHARED_PREFERENCES_INITIALIZING_ERROR_MESSAGE);
                         }
-                }
             }
-        }
     }
 
     @Override
     public void resetTimesAppWasLaunchedCount() {
-        final MainView mainView = getMainView();
+        final PreferencesEditor preferencesEditor = getPreferencesEditor();
 
-        if(mainView != null) {
-            final Context context = mainView.getContext();
-
-            if(context != null) {
-
-                final PreferencesEditor preferencesEditor = App.getPreferenceEditorModule()
-                        .getPreferencesEditor(context);
-
-                if(preferencesEditor != null) {
-
-                    preferencesEditor.setIntValue(TIMES_APP_WAS_LAUNCHED_TAG, Presenter.ZERO_LAUNCHES_COUNT);
-                }
+            if(preferencesEditor != null) {
+                preferencesEditor.setIntValue(TIMES_APP_WAS_LAUNCHED_TAG, Presenter.ZERO_LAUNCHES_COUNT);
             }
-        }
+
     }
 
     @NonNull
@@ -190,21 +141,41 @@ public class PresenterImpl implements Presenter {
 
     @Override
     public boolean isNotificationSearchBarWidgetActive() {
-        final MainView mainView = getMainView();
+        final PreferencesEditor preferencesEditor = getPreferencesEditor();
 
+            if(preferencesEditor != null) {
+
+                return preferencesEditor.getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG);
+            }
+        return false;
+    }
+
+    private PreferencesEditor getPreferencesEditor(){
+        final MainView mainView = getMainView();
+        PreferencesEditor preferencesEditor = null;
         if(mainView != null) {
             final Context context = mainView.getContext();
 
             if(context != null) {
-                final PreferencesEditor preferencesEditor = App.getPreferenceEditorModule()
+                preferencesEditor = App.getPreferenceEditorModule()
                         .getPreferencesEditor(context);
-
-                if(preferencesEditor != null) {
-
-                    return preferencesEditor.getBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG);
-                }
             }
         }
-        return false;
+        return preferencesEditor;
+    }
+
+    private SearchNotification getSearchNotification(){
+        final MainView mainView = getMainView();
+        SearchNotification searchNotification = null;
+        if(mainView != null) {
+            final Context context = mainView.getContext();
+
+            if(context != null) {
+
+                searchNotification = App.getSearchNotificationModule()
+                        .getSearchNotification(context);
+            }
+        }
+        return searchNotification;
     }
 }
