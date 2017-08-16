@@ -150,32 +150,37 @@ public class PresenterImpl implements Presenter {
         return false;
     }
 
-    private PreferencesEditor getPreferencesEditor(){
+    private Context getContext(){
         final MainView mainView = getMainView();
-        PreferencesEditor preferencesEditor = null;
+        Context context = null;
         if(mainView != null) {
-            final Context context = mainView.getContext();
+            context = mainView.getContext();
 
-            if(context != null) {
-                preferencesEditor = App.getPreferenceEditorModule()
-                        .getPreferencesEditor(context);
-            }
         }
+        return context;
+    }
+
+    private PreferencesEditor getPreferencesEditor(){
+        PreferencesEditor preferencesEditor = null;
+        final Context context = getContext();
+
+        if(context != null) {
+            preferencesEditor = App.getPreferenceEditorModule()
+                .getPreferencesEditor(context);
+        }
+
         return preferencesEditor;
     }
 
     private SearchNotification getSearchNotification(){
-        final MainView mainView = getMainView();
         SearchNotification searchNotification = null;
-        if(mainView != null) {
-            final Context context = mainView.getContext();
+        final Context context = getContext();
 
-            if(context != null) {
-
-                searchNotification = App.getSearchNotificationModule()
-                        .getSearchNotification(context);
+        if(context != null) {
+            searchNotification = App.getSearchNotificationModule()
+                .getSearchNotification(context);
             }
-        }
+
         return searchNotification;
     }
 }
