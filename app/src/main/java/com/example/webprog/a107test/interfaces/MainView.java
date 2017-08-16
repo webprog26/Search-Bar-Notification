@@ -11,10 +11,12 @@ import android.support.annotation.NonNull;
 
 public interface MainView {
 
-    boolean isSearchBarUserActionIntent(final Intent searchBarUserActionIntent);
     @NonNull
     Handler getHandler();
-    void incrementTimesAppWasLaunchedCount();
     @NonNull
     Context getContext();
+    @NonNull
+    AppMenuDelegate getAppMenuDelegate();
+    boolean isSearchInputFieldInFocus();
+    void hideKeyboard();
 }

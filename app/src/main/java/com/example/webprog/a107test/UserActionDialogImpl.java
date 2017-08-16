@@ -48,9 +48,9 @@ public class UserActionDialogImpl implements UserActionDialog {
             askUserToActivateSearchBarAlertDialog.setPositiveButton(context.getString(R.string.activate), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    App.getPreferencesEditor().setBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG, true);
+                    App.getPreferenceEditorModule().getPreferencesEditor(context)
+                            .setBooleanValue(IS_SEARCH_BAR_ACTIVE_TAG, true);
                     presenter.sendNotification();
-                    presenter.resetTimesAppWasLaunchedCount();
                 }
             });
 
@@ -58,7 +58,6 @@ public class UserActionDialogImpl implements UserActionDialog {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
-                    presenter.resetTimesAppWasLaunchedCount();
                 }
             });
             askUserToActivateSearchBarAlertDialog.setCancelable(true);

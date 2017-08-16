@@ -2,8 +2,8 @@ package com.example.webprog.a107test;
 
 import android.app.Application;
 
-import com.example.webprog.a107test.interfaces.PreferencesEditor;
-import com.example.webprog.a107test.interfaces.SearchNotification;
+import com.example.webprog.a107test.interfaces.PreferenceEditorModule;
+import com.example.webprog.a107test.interfaces.SearchNotificationModule;
 
 /**
  * Created by webprog on 09.08.17.
@@ -11,21 +11,21 @@ import com.example.webprog.a107test.interfaces.SearchNotification;
 
 public class App extends Application {
 
-    private static PreferencesEditor mPreferencesEditor;
-    private static SearchNotification mSearchNotification;
+    private static PreferenceEditorModule mPreferenceEditorModule;
+    private static SearchNotificationModule mSearchNotificationModule;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        this.mPreferencesEditor = new PreferencesEditorImpl(this);
-        this.mSearchNotification = new SearchNotificationImpl(this);
+        this.mPreferenceEditorModule = new PreferencesEditorModuleImpl();
+        this.mSearchNotificationModule = new SearchNotificationModuleImpl();
     }
 
-    public static PreferencesEditor getPreferencesEditor(){
-        return mPreferencesEditor;
+    public static PreferenceEditorModule getPreferenceEditorModule(){
+        return mPreferenceEditorModule;
     }
 
-    public static SearchNotification getSearchNotification() {
-        return mSearchNotification;
+    public static SearchNotificationModule getSearchNotificationModule(){
+        return mSearchNotificationModule;
     }
 }
