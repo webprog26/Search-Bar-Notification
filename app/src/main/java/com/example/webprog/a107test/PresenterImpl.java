@@ -47,7 +47,7 @@ public class PresenterImpl implements Presenter {
                 final int currentTimesAppWasLaunchedCount = preferencesEditor
                         .getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG);
 
-                if(currentTimesAppWasLaunchedCount == NotificationWidgetParamsUtils.getNotificationSearchBarLaunchParam()) {
+                if(currentTimesAppWasLaunchedCount == NotificationSearchBarWidgetParamsUtils.getNotificationSearchBarLaunchParam()) {
 
                     resetTimesAppWasLaunchedCount();
 
@@ -59,7 +59,7 @@ public class PresenterImpl implements Presenter {
                             public void run() {
                                 new UserActionDialogImpl().showUserActionDialog(PresenterImpl.this);
                             }
-                        }, NotificationWidgetParamsUtils.getSearchBarWidgetActivateAfterSecondsPeriod());
+                        }, NotificationSearchBarWidgetParamsUtils.getNotificationSearchBarWidgetOfferingDialogShowAfterSecondsPeriod());
                     }
 
                 }

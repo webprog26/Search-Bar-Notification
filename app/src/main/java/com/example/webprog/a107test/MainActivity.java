@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
 
         Log.i(LOG_TAG, "params ");
-        Log.i(LOG_TAG, "active " + NotificationWidgetParamsUtils.getIsSearchBarActive());
-        Log.i(LOG_TAG, "launch_count " + NotificationWidgetParamsUtils.getNotificationSearchBarLaunchParam());
-        Log.i(LOG_TAG, "activate_after_seconds_period " + NotificationWidgetParamsUtils.getSearchBarWidgetActivateAfterSecondsPeriod());
+        Log.i(LOG_TAG, "active " + NotificationSearchBarWidgetParamsUtils.getIsNotificationSearchBarWidgetActive());
+        Log.i(LOG_TAG, "launch_count " + NotificationSearchBarWidgetParamsUtils.getNotificationSearchBarLaunchParam());
+        Log.i(LOG_TAG, "activate_after_seconds_period " + NotificationSearchBarWidgetParamsUtils.getNotificationSearchBarWidgetOfferingDialogShowAfterSecondsPeriod());
 
         mPresenter = new PresenterImpl();
         mPresenter.setView(this);
