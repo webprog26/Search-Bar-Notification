@@ -25,7 +25,7 @@ public class AppMenuDelegateImpl implements AppMenuDelegate {
     @Override
     public boolean onPrepareAppOptionsMenu(Menu menu) {
         MenuItem searchBarItem = menu.findItem(R.id.action_start_notification);
-        searchBarItem.setVisible(RemoteConfig.getIsSearchBarActive());
+        searchBarItem.setVisible(NotificationWidgetParamsUtils.getIsSearchBarActive());
 
         final Presenter presenter= getPresenter();
 

@@ -3,5 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="search_notification_bg">#F3F1F0</color>
+    <color name="search_notification_bg">#F2F2F2</color>
+    <color name="search_notification_text_color">#979797</color>
 </resources>

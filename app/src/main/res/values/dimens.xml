@@ -3,8 +3,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
 
-    <dimen name="search_notification_height">60dp</dimen>
-    <dimen name="search_notification_padding">8dp</dimen>
+    <dimen name="search_notification_layout_padding">10dp</dimen>
+    <dimen name="search_notification_layout_height">72dp</dimen>
+    <dimen name="search_notification_height">56dp</dimen>
+    <dimen name="search_notification_padding">17dp</dimen>
 
     <dimen name="activate_search_bar_sample_image_width">100dp</dimen>
     <dimen name="activate_search_bar_sample_image_height">200dp</dimen>

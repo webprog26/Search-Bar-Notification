@@ -3,7 +3,6 @@ package com.example.webprog.a107test;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,7 +47,7 @@ public class PresenterImpl implements Presenter {
                 final int currentTimesAppWasLaunchedCount = preferencesEditor
                         .getIntValue(Presenter.TIMES_APP_WAS_LAUNCHED_TAG);
 
-                if(currentTimesAppWasLaunchedCount == RemoteConfig.getTimesToShowActivateSearchBarDialog()) {
+                if(currentTimesAppWasLaunchedCount == NotificationWidgetParamsUtils.getNotificationSearchBarLaunchParam()) {
 
                     resetTimesAppWasLaunchedCount();
 
@@ -60,7 +59,7 @@ public class PresenterImpl implements Presenter {
                             public void run() {
                                 new UserActionDialogImpl().showUserActionDialog(PresenterImpl.this);
                             }
-                        }, RemoteConfig.getSearchBarWidgetUserDialogShowingTimePeriod());
+                        }, NotificationWidgetParamsUtils.getSearchBarWidgetActivateAfterSecondsPeriod());
                     }
 
                 }

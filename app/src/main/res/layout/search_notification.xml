@@ -5,23 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/search_notification_bg"
-    android:paddingLeft="@dimen/search_notification_padding"
-    android:paddingTop="@dimen/search_notification_padding"
-    android:paddingRight="@dimen/search_notification_padding"
-    android:paddingBottom="@dimen/search_notification_padding">
+    android:paddingLeft="@dimen/search_notification_layout_padding"
+    android:paddingTop="@dimen/search_notification_layout_padding"
+    android:paddingRight="@dimen/search_notification_layout_padding"
+    android:paddingBottom="@dimen/search_notification_layout_padding">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/search_notification_height"
-            android:background="@android:drawable/dialog_holo_light_frame"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
+            android:background="@drawable/notification_widget_bg"
+            android:paddingLeft="@dimen/search_notification_padding"
+            android:paddingRight="@dimen/search_notification_padding">
 
             <TextView
                 android:id="@+id/tv_search_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:textColor="@color/search_notification_text_color"
                 android:text="@string/search_notification_message"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -33,7 +34,8 @@
                 android:src="@drawable/ic_mic"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:alpha="200"/>
         </RelativeLayout>
 
 </LinearLayout>
